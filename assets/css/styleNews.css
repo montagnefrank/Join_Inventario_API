@@ -1,0 +1,81 @@
+@media (max-width: 480px) {
+    .app-content {
+        padding: 0px;
+    }
+}
+
+.app-content .side-app {
+    padding: 40px 0 0 0;
+}
+
+.breadcrumb {
+    padding: 0 15px 0 15px!important;
+    margin: 6px 0;
+}
+
+.page-header {
+    padding: 0 15px 0 15px!important;
+    margin: 10px 0;
+}
+
+.card-header {
+    background: none;
+    padding: 6px 6px;
+    min-height: 20px;
+}
+
+.card-body {
+    padding: 12px 12px;
+}
+
+.form-group {
+    margin-bottom: 6px;
+}
+
+.header {
+    background: #ffa065;
+}
+
+.app-sidebar {
+    background: #ffa065;
+}
+
+.btn {
+    padding: 0px 9px;
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        line-height: 16px;
+        font-size: 16px;
+        padding-bottom: 0px;
+        margin-bottom: 16px;
+    }
+}
+
+.breadcrumb-item {
+    font-size: 8px;
+}
+
+.custom-control.custom-radio {
+    display: inline-block;
+    width: 40%;
+}
+
+.card-footer {
+    padding: 10px 10px;
+}
+
+.bg-join {
+    background-color: #dd6c26 !important;
+}
+
+.avatar {
+    background: #ffa065 no-repeat center/cover;
+}
+
+.gondolaBoxInpG,
+.totalProdsBox {
+    margin-left: 10px!important;
+    margin-right: 10px!important;
+}
