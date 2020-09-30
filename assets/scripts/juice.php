@@ -1,6 +1,8 @@
 <script class="juice">
 $(document).ready(function() {
-    $('head').append('<link href="'+apiURI+'assets/css/styleNews.css" rel="stylesheet" />')
+    /** ACTUALIZAMOS ESTILOS DE LA INTERFAZ */
+    $('head').append('<link href="'+apiURI+'assets/css/styleNews.css" rel="stylesheet" />');
+    
     /*           DETECTAMOS SI HAY SESION ALMACENADA               */
     setTimeout(function() {
         var userIntel = window.localStorage.getItem("userIntel");

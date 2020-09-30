@@ -942,6 +942,29 @@ if ($_POST || $_GET) {
             return;
         }
     }
+
+    //          GUARDAR NUEVA TOMA           //
+    if ($method == 'consultarDevol') {
+
+        $order = $_POST['devolVal'];
+
+        $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+        $client = new SoapClient($wsdlUrl);
+
+        error_log('//////////////////   POSSO           ///////////////////////////////');
+        $params = new stdClass();
+        $params->inventario = $_POST['inventario'];
+        $result = $client->GetReturnOrdenByNumber($order);
+
+
+        $json['scriptResp'] = "saved";
+        $json['resp'] = $result;
+        $output = ob_get_contents();
+        ob_end_clean();
+        $json['output'] = $output;
+        echo json_encode($json);
+        return;
+    }
 }
 
 //   Si no se llamó ningún método de la API     //

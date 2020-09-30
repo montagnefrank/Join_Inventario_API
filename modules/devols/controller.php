@@ -15,62 +15,63 @@
         $('.anim').velocity("transition.slideUpBigIn", {
             stagger: 250,
             complete: function() {
+                $('#buscarDevol').focus();
+            }
+        });
 
+
+        $(document).off('click', ".buscarDevolBox button");
+        $(document).on('click', '.buscarDevolBox button', function(e) {
+
+            var devolVal = $(document).find('#buscarDevol').val();
+            if (devolVal == '') {
+                $.growl.error({
+                    message: "Debe ingresar el codigo de la Orden"
+                });
+                return;
+            }
+            getThisDevol();
+        });
+
+        $(document).find('#buscarDevol').keypress(function(e) {
+            if (e.which == 13) {
+
+                var devolVal = $(document).find('#buscarDevol').val();
+                if (devolVal == '') {
+                    $.growl.error({
+                        message: "Debe ingresar el codigo de la Orden"
+                    });
+                    return;
+                }
+                getThisDevol();
             }
         });
     }, 1000);
 
-    // CREAR ARREGLO DE FECHAS DIA POR DIA
-    function getDateArray(type = 'normal') {
-        // CREAMOS EL RANGO DE FECHAS QUE SE MOSTRARA EN EL GRAFICO
-        var startDate = new Date("2019-11-11");
-        var today = new Date(),
-            dd = today.getDate() + 1,
-            mm = today.getMonth() + 1,
-            yyyy = today.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        today = yyyy + '-' + mm + '-' + dd;
-        var endDate = new Date(today);
+    function getThisDevol() {
 
-        var arr = new Array();
-        var dt = new Date(startDate);
-        while (dt <= endDate) {
-            var thisday = new Date(dt),
-                d = thisday.getDate() + 1,
-                m = thisday.getMonth() + 1,
-                y = thisday.getFullYear();
-            if (d < 10) {
-                d = '0' + d;
-            }
-            if (m < 10) {
-                m = '0' + m;
-            }
-            if (m == 11) {
-                if (d == 31) {
-                    d = '01';
-                    m = '12';
-                }
-            }
-            if (m == 12) {
-                if (d == 32) {
-                    d = '01';
-                    m = '01';
-                }
-            }
-            if (type == 'normal') {
-                thisday = m + '-' + d;
-            } else {
-                thisday = y + '-' + m + '-' + d;
-            }
-            arr.push(thisday);
-            dt.setDate(dt.getDate() + 1);
-        }
+        console.log('test');
+        var devolVal = $(document).find('#buscarDevol').val(),
+            formData = new FormData();
+        formData.append('devolVal', devolVal);
+        formData.append('meth', 'consultarDevol');
+        $.ajax({
+            url: apiURI,
+            type: 'POST',
+            cache: false,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(data) {
+                console.log('test2');
+                console.log(data);
 
-        return arr;
+            },
+            error: function(error) {
+                console.log("Hubo un error de internet, intente de nuevo");
+                console.log(error);
+            }
+        });
     }
 </script>

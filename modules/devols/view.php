@@ -17,9 +17,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12 anim">
+                
+                <div class="col-lg-6 col-md-12 col-xl-3 anim anim">
+                    <div class="card">
+                        <a><img class="card-img-top br-tr-7 br-tl-7" src="___APIURI___assets/img/devols.jpg" alt="Bienvenido"></a>
+                        <div class="card-body d-flex flex-column">
+                            <h4><a href="#"><i class="fa fa-search" ></i> Buscar Orden de Devolución</a></h4>
+                        </div>
+                        <div class="card-footer d-flex flex-column">
+                            <div class="text-muted">Consulte en el sistema la orden para poder actualizar el estado de los prodcutos.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 anim buscarDevolBox">
                     <div class="input-group mb-3 ">
-                        <input type="text" class="form-control br-tl-7 br-bl-7" placeholder="Ingrese la orden de Devolucion">
+                        <input type="text" class="form-control br-tl-7 br-bl-7" id="buscarDevol" placeholder="Ingrese la orden de Devolución">
                         <div class="input-group-append ">
                             <button type="button" class="btn btn-primary br-tr-7 br-br-7">
                                 <i class="fa fa-search" aria-hidden="true"></i>
