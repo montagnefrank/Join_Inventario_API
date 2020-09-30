@@ -46,19 +46,32 @@
                 formData.append('password', password);
                 formData.append('apiuri', apiURI);
                 formData.append('meth', 'login');
-                apiCall(formData, function(data) {
-                    if (data.scriptResp == "noMatch") {
-                        $("#loading").fadeOut("fast", function() {
-                            $.growl.error({
-                                message: "Usuario o contraseña incorrectos"
-                            })
-                        });
-                        //    $('.username').val('');
-                        //    $('.password').val('');
-                    }
-                    if (data.scriptResp == "match") {
-                        window.localStorage.setItem("userIntel", JSON.stringify(data.userIntel));
-                        showPanel(data.userIntel.panelUsuario, data.userIntel.idUsuario);
+                $.ajax({
+                    url: apiURI,
+                    type: 'POST',
+                    dataType: "json",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        if (data.scriptResp == "noMatch") {
+                            $("#loading").fadeOut("fast", function() {
+                                $.growl.error({
+                                    message: "Usuario o contraseña incorrectos"
+                                })
+                            });
+                            //    $('.username').val('');
+                            //    $('.password').val('');
+                        }
+                        if (data.scriptResp == "match") {
+                            window.localStorage.setItem("userIntel", JSON.stringify(data.userIntel));
+                            showPanel(data.userIntel.panelUsuario, data.userIntel.idUsuario);
+                        }
+                    },
+                    error: function(error) {
+                        console.log("Hubo un error de internet, intente de nuevo");
+                        console.log(error);
                     }
                 });
             });
@@ -145,24 +158,37 @@
         formData.append('panel', p);
         formData.append('user', u);
         formData.append('meth', 'loadPanel');
-        return apiCall(formData, function(data) {
-            if (data.scriptResp == "loaded") {
-                $('body div.page').remove();
-                $('body script.controller').remove();
-                $('body').attr("class", data.panelName + ' app sidebar-mini');
-                var view = populate(data.panelName, data.panel);
-                $(view).insertAfter("#loading");
-                $('body').append(data.control);
-                if (data.panelName != 'login') {
-                    $('.video-background').hide();
-                    loadSideBar(userIntel.idUsuario);
-                    userIntel.panelUsuario = data.panelName;
-                    window.localStorage.setItem("userIntel", JSON.stringify(userIntel));
-                } else {
-                    $('.video-background').show();
-                    showLogin();
-                    $("#loading").fadeOut("fast");
+        return $.ajax({
+            url: apiURI,
+            type: 'POST',
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(data) {
+                if (data.scriptResp == "loaded") {
+                    $('body div.page').remove();
+                    $('body script.controller').remove();
+                    $('body').attr("class", data.panelName + ' app sidebar-mini');
+                    var view = populate(data.panelName, data.panel);
+                    $(view).insertAfter("#loading");
+                    $('body').append(data.control);
+                    if (data.panelName != 'login') {
+                        $('.video-background').hide();
+                        loadSideBar(userIntel.idUsuario);
+                        userIntel.panelUsuario = data.panelName;
+                        window.localStorage.setItem("userIntel", JSON.stringify(userIntel));
+                    } else {
+                        $('.video-background').show();
+                        showLogin();
+                        $("#loading").fadeOut("fast");
+                    }
                 }
+            },
+            error: function(error) {
+                console.log("Hubo un error de internet, intente de nuevo");
+                console.log(error);
             }
         });
     }
@@ -215,16 +241,29 @@
             var formData = new FormData();
             formData.append('user', u);
             formData.append('meth', 'showSideBar');
-            return apiCall(formData, function(data) {
-                if (data.scriptResp == "loaded") {
-                    var view = populate('sideBar', data.sideb);
-                    $(view).insertBefore("#appContent");
-                    userData.sidebarUsuario = view;
-                    window.localStorage.setItem("userIntel", JSON.stringify(userData));
-                    fixsb();
-                    $("#loading").fadeOut("fast");
-                } else {
-                    console.log('hubo un error #45345345789754653');
+            return $.ajax({
+                url: apiURI,
+                type: 'POST',
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function(data) {
+                    if (data.scriptResp == "loaded") {
+                        var view = populate('sideBar', data.sideb);
+                        $(view).insertBefore("#appContent");
+                        userData.sidebarUsuario = view;
+                        window.localStorage.setItem("userIntel", JSON.stringify(userData));
+                        fixsb();
+                        $("#loading").fadeOut("fast");
+                    } else {
+                        console.log('hubo un error #45345345789754653');
+                    }
+                },
+                error: function(error) {
+                    console.log("Hubo un error de internet, intente de nuevo");
+                    console.log(error);
                 }
             });
         } else {
@@ -342,12 +381,26 @@
                         formData.append('pic', profile.getImageUrl());
                         formData.append('email', profile.getEmail());
                         formData.append('meth', 'googlelogin');
-                        apiCall(formData, function(data) {
-                            if (data.scriptResp == "match") {
-                                window.localStorage.setItem("userIntel", JSON.stringify(data.userIntel));
-                                showPanel(data.userIntel.panelUsuario, data.userIntel.idUsuario);
-                            } else {
+                        $.ajax({
+                            url: apiURI,
+                            type: 'POST',
+                            dataType: "json",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function(data) {
+                                if (data.scriptResp == "match") {
+                                    window.localStorage.setItem("userIntel", JSON.stringify(data.userIntel));
+                                    showPanel(data.userIntel.panelUsuario, data.userIntel.idUsuario);
+                                } else {
+                                    window.localStorage.setItem("googleAlready", 'NO');
+                                }
+                            },
+                            error: function(error) {
                                 window.localStorage.setItem("googleAlready", 'NO');
+                                console.log("Hubo un error de internet, intente de nuevo");
+                                console.log(error);
                             }
                         });
                     } else {
@@ -369,12 +422,26 @@
                     formData.append('pic', profile.getImageUrl());
                     formData.append('email', profile.getEmail());
                     formData.append('meth', 'googlelogin');
-                    apiCall(formData, function(data) {
-                        if (data.scriptResp == "match") {
-                            window.localStorage.setItem("userIntel", JSON.stringify(data.userIntel));
-                            showPanel(data.userIntel.panelUsuario, data.userIntel.idUsuario);
-                        } else {
+                    $.ajax({
+                        url: apiURI,
+                        type: 'POST',
+                        dataType: "json",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        success: function(data) {
+                            if (data.scriptResp == "match") {
+                                window.localStorage.setItem("userIntel", JSON.stringify(data.userIntel));
+                                showPanel(data.userIntel.panelUsuario, data.userIntel.idUsuario);
+                            } else {
+                                window.localStorage.setItem("googleAlready", 'NO');
+                            }
+                        },
+                        error: function(error) {
                             window.localStorage.setItem("googleAlready", 'NO');
+                            console.log("Hubo un error de internet, intente de nuevo");
+                            console.log(error);
                         }
                     });
                 } else {
