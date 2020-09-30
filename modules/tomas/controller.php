@@ -81,63 +81,36 @@
                                 formData.append('userToma', userId);
                                 formData.append('inventario', JSON.stringify(invent));
                                 formData.append('meth', 'saveNewToma');
-                                $.ajax({
-                                    url: apiURI,
-                                    type: 'POST',
-                                    cache: false,
-                                    dataType: "json",
-                                    contentType: false,
-                                    processData: false,
-                                    data: formData,
-                                    success: function(data) {
-                                        console.log(data);
-                                        if (data.scriptResp == "saved") {
-                                            $(document).find('.listadoTomaFisica tbody').html('');
-                                            $('#saveTomaLecturasFake').velocity("transition.slideUpOut", {
-                                                duration: 200,
-                                                complete: function() {
-                                                    $('#gondolaBox').val('');
-                                                    $('.totalRead').html('0');
-                                                    swal({
-                                                        title: "Felicitaciones",
-                                                        text: "Su toma ha sido registrada exitosamente.",
-                                                        type: "success",
-                                                        showCancelButton: false,
-                                                        confirmButtonText: 'Entendido',
-                                                        cancelButtonText: 'salir'
-                                                    });
-                                                    $('#saveTomaLecturas').velocity("transition.slideUpIn", {
-                                                        duration: 200
-                                                    })
-                                                }
-                                            });
-                                        } else {
-                                            //$(document).find('.listadoTomaFisica tbody').html('');
-                                            $('#saveTomaLecturasFake').velocity("transition.slideUpOut", {
-                                                duration: 200,
-                                                complete: function() {
-                                                    swal({
-                                                        title: "Lo Sentimos",
-                                                        text: "Hubo un problema para guardar sus datos, intente de nuevo",
-                                                        type: "error",
-                                                        showCancelButton: false,
-                                                        confirmButtonText: 'Entendido',
-                                                        cancelButtonText: 'salir'
-                                                    });
-                                                    $('#saveTomaLecturas').velocity("transition.slideUpIn", {
-                                                        duration: 200
-                                                    })
-                                                }
-                                            });
-                                        }
-                                    },
-                                    error: function(error) {
+                                apiCall(formData, function(data) {
+                                    console.log(data);
+                                    if (data.scriptResp == "saved") {
+                                        $(document).find('.listadoTomaFisica tbody').html('');
+                                        $('#saveTomaLecturasFake').velocity("transition.slideUpOut", {
+                                            duration: 200,
+                                            complete: function() {
+                                                $('#gondolaBox').val('');
+                                                $('.totalRead').html('0');
+                                                swal({
+                                                    title: "Felicitaciones",
+                                                    text: "Su toma ha sido registrada exitosamente.",
+                                                    type: "success",
+                                                    showCancelButton: false,
+                                                    confirmButtonText: 'Entendido',
+                                                    cancelButtonText: 'salir'
+                                                });
+                                                $('#saveTomaLecturas').velocity("transition.slideUpIn", {
+                                                    duration: 200
+                                                })
+                                            }
+                                        });
+                                    } else {
+                                        //$(document).find('.listadoTomaFisica tbody').html('');
                                         $('#saveTomaLecturasFake').velocity("transition.slideUpOut", {
                                             duration: 200,
                                             complete: function() {
                                                 swal({
                                                     title: "Lo Sentimos",
-                                                    text: "Hubo un problema para guardar sus datos, Error de conexion",
+                                                    text: "Hubo un problema para guardar sus datos, intente de nuevo",
                                                     type: "error",
                                                     showCancelButton: false,
                                                     confirmButtonText: 'Entendido',
@@ -148,8 +121,6 @@
                                                 })
                                             }
                                         });
-                                        console.log("Hubo un error de internet, intente de nuevo");
-                                        console.log(error);
                                     }
                                 });
 
