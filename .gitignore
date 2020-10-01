@@ -11,6 +11,7 @@
 # generated files
 assets/scripts/conn.php
 assets/scripts/c.php
+dev/
 bin/
 gen/
 

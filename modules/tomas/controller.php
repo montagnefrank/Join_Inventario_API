@@ -83,7 +83,7 @@
                                 formData.append('meth', 'saveNewToma');
                                 apiCall(formData, function(data) {
                                     console.log(data);
-                                    if (data.scriptResp == "saved") {
+                                    if (data.status == "saved") {
                                         $(document).find('.listadoTomaFisica tbody').html('');
                                         $('#saveTomaLecturasFake').velocity("transition.slideUpOut", {
                                             duration: 200,

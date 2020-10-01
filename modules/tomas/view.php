@@ -79,7 +79,7 @@
                         <div class="card-header">
                             <h3 class="card-title"> <i class="fa fa-list"></i> Productos Registrados</h3>
                             <div class="card-options">
-                            <span class="badge badge-primary float-right pull-right totalProdsBox">Total <i class="fa fa-check-square"></i> <strong class="totalRead">0</strong></span>
+                                <span class="badge badge-primary float-right pull-right totalProdsBox">Total <i class="fa fa-check-square"></i> <strong class="totalRead">0</strong></span>
                                 <!-- <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
 											<a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a> -->
                             </div>

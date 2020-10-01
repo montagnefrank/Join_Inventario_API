@@ -66,7 +66,8 @@
     padding: 10px 10px;
 }
 
-.bg-join {
+.bg-join,
+.btn-join {
     background-color: #dd6c26 !important;
 }
 
@@ -78,4 +79,18 @@
 .totalProdsBox {
     margin-left: 10px!important;
     margin-right: 10px!important;
+}
+
+body {
+    font-family: 'feather', sans-serif;
+    font-size: 16px;
+}
+
+#appContent table.listadoDevol>thead>tr>th,
+#appContent table.listadoDevol>tbody>tr>td {
+    font-size: 10px!important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 0px;
 }

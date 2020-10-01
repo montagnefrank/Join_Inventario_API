@@ -56,8 +56,8 @@ require 'assets/plugins/PHPMailer/src/PHPMailer.php';
 require 'assets/plugins/PHPMailer/src/SMTP.php';
 
 require 'assets/scripts/utils.php';
-require 'assets/scripts/conn.php';
-//require 'assets/scripts/c.php';
+//require 'assets/scripts/conn.php';
+require 'assets/scripts/c.php';
 
 $json = array();
 
@@ -800,33 +800,19 @@ if ($_POST || $_GET) {
 
     //          DEBUG           //
     if ($method == 'debug') {
+        
+        error_log('//////////////////  ///////////////////////////////');
+        
+        $order = $_GET['find'];
+        $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+        $client = new SoapClient($wsdlUrl);
+        $params = new stdClass();
+        //$params->CODIGOBARRAS = (int)$order;
+        $result = $client->SaveReturnDetail($params);
 
-        $sql = "SELECT CODVENDEDOR,NOMVENDEDOR, PASSWORDWEB FROM VENDEDORES WHERE NOMVENDEDOR = 'jeferecep' AND PASSWORDWEB = 'abc1234'";
-        $pa1 = array();
-        $op1 = array("scrollable" => SQLSRV_CURSOR_KEYSET);
-
-        $re1 = sqlsrv_query($conexion, $sql, $pa1, $op1);
-        if (sqlsrv_num_rows($re1) != 0) {
-            while ($fila = sqlsrv_fetch_array($re1)) {
-                $row = [];
-                $row['panelView'] = file_get_contents('modules/home/view.php');
-                $row['login'] = "YES";
-                $row['panelUsuario'] = 'home';
-                $row['userImg'] = $apiuri . "assets/img/users/default.jpg";
-                $row['idUsuario'] = $fila['CODVENDEDOR'];;
-                $row['userUsuario'] = $fila['NOMVENDEDOR'];;
-                $row['nombreUsuario'] = $fila['NOMVENDEDOR'];;
-                $row['rolUsuario'] = 'Usuario';
-            }
-
-            $json['userIntel'] = $row;
-            $json['scriptResp'] = "match";
-            $output = ob_get_contents();
-            ob_end_clean();
-            $json['output'] = $output;
-            echo json_encode($json);
-            return;
-        }
+        ob_end_clean();
+        var_dump($result);
+        var_dump($order);
         return;
     }
 
@@ -925,7 +911,8 @@ if ($_POST || $_GET) {
             $result = $client->CreateInventarioFisico($params);
 
 
-            $json['scriptResp'] = "saved";
+            $json['scriptResp'] = "done";
+            $json['status'] = "saved";
             $output = ob_get_contents();
             ob_end_clean();
             $json['output'] = $output;
@@ -951,13 +938,13 @@ if ($_POST || $_GET) {
         $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
         $client = new SoapClient($wsdlUrl);
 
-        error_log('//////////////////   POSSO           ///////////////////////////////');
+        error_log('//////////////////  ///////////////////////////////');
         $params = new stdClass();
-        $params->inventario = $_POST['inventario'];
-        $result = $client->GetReturnOrdenByNumber($order);
+        $params->numero = (int)$order;
+        $result = $client->GetReturnOrdenByNumber($params);
 
 
-        $json['scriptResp'] = "saved";
+        $json['scriptResp'] = "done";
         $json['resp'] = $result;
         $output = ob_get_contents();
         ob_end_clean();
