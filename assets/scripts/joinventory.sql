@@ -1,21 +1,41 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : somosjoin.com
+ Source Server         : joinventory.web
  Source Server Type    : MariaDB
- Source Server Version : 100324
- Source Host           : somosjoin.com:3306
- Source Schema         : somosjoin_invy
+ Source Server Version : 100023
+ Source Host           : joinventory.web:3306
+ Source Schema         : joinventory
 
  Target Server Type    : MariaDB
- Target Server Version : 100324
+ Target Server Version : 100023
  File Encoding         : 65001
 
- Date: 26/09/2020 20:27:07
+ Date: 02/10/2020 16:03:38
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for gt_devols
+-- ----------------------------
+DROP TABLE IF EXISTS `gt_devols`;
+CREATE TABLE `gt_devols`  (
+  `idDevol` int(255) NOT NULL AUTO_INCREMENT,
+  `userDevol` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `fechaDevol` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `objDevol` varchar(5000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `statusDevol` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`idDevol`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of gt_devols
+-- ----------------------------
+INSERT INTO `gt_devols` VALUES (28, '', '2020-10-02 20:45:07', '\"[{\"codarticulo\":\"3486\",\"talla\":\"410\",\"color\":\"001\",\"oldquantity\":\"60\",\"barcode\":\"001MD44309001410\",\"returnquantity\":\"4\",\"cajamas\":\"123\",\"ubi\":\"0000\",\"doc\":\"618\"}]\"', '1');
+INSERT INTO `gt_devols` VALUES (29, '3', '2020-10-02 20:50:36', '\"[{\"codarticulo\":\"3486\",\"talla\":\"400\",\"color\":\"001\",\"oldquantity\":\"84\",\"barcode\":\"001MD44309001400\",\"returnquantity\":\"6\",\"cajamas\":\"123\",\"ubi\":\"0000\",\"doc\":\"618\"},{\"codarticulo\":\"3486\",\"talla\":\"400\",\"color\":\"001\",\"oldquantity\":\"84\",\"barcode\":\"001MD44309001400\",\"returnquantity\":\"18\",\"cajamas\":\"1232\",\"ubi\":\"0000\",\"doc\":\"618\"}]\"', '1');
+INSERT INTO `gt_devols` VALUES (30, '3', '2020-10-02 20:50:47', '\"[{\"codarticulo\":\"3486\",\"talla\":\"400\",\"color\":\"001\",\"oldquantity\":\"84\",\"barcode\":\"001MD44309001400\",\"returnquantity\":\"6\",\"cajamas\":\"123\",\"ubi\":\"0000\",\"doc\":\"618\"},{\"codarticulo\":\"3486\",\"talla\":\"400\",\"color\":\"001\",\"oldquantity\":\"84\",\"barcode\":\"001MD44309001400\",\"returnquantity\":\"18\",\"cajamas\":\"1232\",\"ubi\":\"0000\",\"doc\":\"618\"}]\"', '1');
 
 -- ----------------------------
 -- Table structure for gt_leads
@@ -55,7 +75,7 @@ CREATE TABLE `gt_portalDetail`  (
   `hasFbPortal` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `dateDetailPortal` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idDetail`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 86 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compressed;
+) ENGINE = InnoDB AUTO_INCREMENT = 86 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of gt_portalDetail
@@ -151,7 +171,7 @@ CREATE TABLE `gt_portals`  (
   `urlPortal` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `deletedPortal` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idPortal`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compressed;
+) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of gt_portals
@@ -173,7 +193,7 @@ CREATE TABLE `gt_tomas`  (
   `objToma` varchar(5000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `statusToma` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idToma`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of gt_tomas
@@ -200,6 +220,11 @@ INSERT INTO `gt_tomas` VALUES (19, '3', '2020-09-26 22:11:58', '\"{\"inventario\
 INSERT INTO `gt_tomas` VALUES (20, '3', '2020-09-26 22:22:29', '\"{\"inventario\":{\"inventariodetail\":[{\"bodega\":\"21\",\"ubicacion\":\"234\",\"cajamaster\":\"3534\",\"codbarras\":\"567456werw\",\"unidades\":\"2\"}]}}\"', '1');
 INSERT INTO `gt_tomas` VALUES (21, '3', '2020-09-26 23:33:48', '\"{\"inventario\":{\"inventariodetail\":[{\"bodega\":\"21\",\"ubicacion\":\"ASSF433\",\"cajamaster\":\"3\",\"codbarras\":\"JJJHH99I3\",\"unidades\":\"1\"}]}}\"', '1');
 INSERT INTO `gt_tomas` VALUES (22, '4', '2020-09-26 23:41:53', '\"{\"inventario\":{\"inventariodetail\":[{\"bodega\":\"21\",\"ubicacion\":\"Hy\",\"cajamaster\":\"Jejdj\",\"codbarras\":\"8\",\"unidades\":\"1\"},{\"bodega\":\"21\",\"ubicacion\":\"Hy\",\"cajamaster\":\"Jejdj\",\"codbarras\":\"Udisjs\",\"unidades\":\"1\"},{\"bodega\":\"21\",\"ubicacion\":\"Hy\",\"cajamaster\":\"Jejdj\",\"codbarras\":\"Jdjsjs\",\"unidades\":\"1\"},{\"bodega\":\"21\",\"ubicacion\":\"Hy\",\"cajamaster\":\"Jejdj\",\"codbarras\":\"Kendke\",\"unidades\":\"1\"},{\"bodega\":\"21\",\"ubicacion\":\"Hy\",\"cajamaster\":\"Jejdj\",\"codbarras\":\"Jejeje\",\"unidades\":\"1\"},{\"bodega\":\"21\",\"ubicacion\":\"Hy\",\"cajamaster\":\"Jejdj\",\"codbarras\":\"jejeje\",\"unidades\":\"1\"},{\"bodega\":\"21\",\"ubicacion\":\"Hy\",\"cajamaster\":\"Jejdj\",\"codbarras\":\"Jdjdjd\",\"unidades\":\"1\"},{\"bodega\":\"21\",\"ubicacion\":\"Hy\",\"cajamaster\":\"Jejdj\",\"codbarras\":\"uejdu\",\"unidades\":\"1\"}]}}\"', '1');
+INSERT INTO `gt_tomas` VALUES (23, '3', '2020-09-28 20:30:42', '\"{\"inventario\":{\"inventariodetail\":[{\"bodega\":\"21\",\"ubicacion\":\"vnhfghftg\",\"cajamaster\":\"e5t4rgtd5gr5\",\"codbarras\":\"56yhrthr6hy\",\"unidades\":\"1\",\"usuario\":\"3\"}]}}\"', '1');
+INSERT INTO `gt_tomas` VALUES (24, '3', '2020-09-28 20:39:10', '\"{\"inventario\":{\"inventariodetail\":[{\"bodega\":\"21\",\"ubicacion\":\"test\",\"cajamaster\":\"test\",\"codbarras\":\"test\",\"unidades\":\"2\",\"usuario\":\"3\",\"gondola\":\"123123123\"},{\"bodega\":\"21\",\"ubicacion\":\"test\",\"cajamaster\":\"test\",\"codbarras\":\"testtest\",\"unidades\":\"1\",\"usuario\":\"3\",\"gondola\":\"123123123\"}],\"filas\":\"3\"}}\"', '1');
+INSERT INTO `gt_tomas` VALUES (25, '3', '2020-09-28 20:56:47', '\"{\"inventario\":{\"inventariodetail\":[{\"bodega\":\"21\",\"ubicacion\":\"12312312\",\"cajamaster\":\"3534\",\"codbarras\":\"567456werw\",\"unidades\":\"1\",\"usuario\":\"3\",\"gondola\":\"12312\"},{\"bodega\":\"21\",\"ubicacion\":\"12312312\",\"cajamaster\":\"0000\",\"codbarras\":\"dzrfg\",\"unidades\":\"1\",\"usuario\":\"3\",\"gondola\":\"12312\"},{\"bodega\":\"21\",\"ubicacion\":\"12312312\",\"cajamaster\":\"0000\",\"codbarras\":\"szw4afzw43fze4\",\"unidades\":\"1\",\"usuario\":\"3\",\"gondola\":\"12312\"}],\"filas\":\"3\"}}\"', '1');
+INSERT INTO `gt_tomas` VALUES (26, '3', '2020-09-28 21:02:03', '\"{\"inventario\":{\"inventariodetail\":[{\"bodega\":\"21\",\"ubicacion\":\"324234\",\"cajamaster\":\"345345\",\"codbarras\":\"345345\",\"unidades\":\"1\",\"usuario\":\"3\",\"gondola\":\"54657\"}],\"filas\":\"1\"}}\"', '1');
+INSERT INTO `gt_tomas` VALUES (27, '3', '2020-09-29 21:36:22', '\"{\"inventario\":{\"inventariodetail\":[{\"bodega\":\"21\",\"ubicacion\":\"999999999\",\"cajamaster\":\"0000\",\"codbarras\":\"TESTDEPRODUCTO\",\"unidades\":\"1\",\"usuario\":\"3\",\"gondola\":\"9999999\"}],\"filas\":\"1\"}}\"', '1');
 
 -- ----------------------------
 -- Table structure for gt_usuario
@@ -215,14 +240,14 @@ CREATE TABLE `gt_usuario`  (
   `temaUsuario` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `panelUsuario` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idUsuario`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compressed;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of gt_usuario
 -- ----------------------------
 INSERT INTO `gt_usuario` VALUES (1, 'burton', 'e831cd0313161e1d78dab9e02b9ea1828ee5a1ba52d585baddb8207f13c955d7f7bcc7b3ecad640afa0466234b5f585ad67175b37f48e281ee3cedf4229170a9', 'Frank Montagne', '2020-09-26 17:46:20', 'Administrador', 'light', 'home');
 INSERT INTO `gt_usuario` VALUES (2, 'gotrade', '43148576426014ed320a600cab66ba465e277b623da094883aa7f3f5f5e93f308649bc279d101ee3e828ccf89423e232cb2ceccf4f3de0fc9159628916ecdc42', 'Go TRADE', '2020-01-10 15:31:17', 'Administrador', 'dark', 'home');
-INSERT INTO `gt_usuario` VALUES (3, 'join', '02ba552e82bed91da444dda508ec836862bbc12fd7e8a151219c2a7b9412654564c4c2ebb7643cba6b6680d70984dbea662457a3e8d1ef94cbe667a32367a9c6', 'Join Ecuador', '2020-09-27 01:17:06', 'Administrador', 'light', 'home');
+INSERT INTO `gt_usuario` VALUES (3, 'join', '02ba552e82bed91da444dda508ec836862bbc12fd7e8a151219c2a7b9412654564c4c2ebb7643cba6b6680d70984dbea662457a3e8d1ef94cbe667a32367a9c6', 'Join Ecuador', '2020-10-02 19:47:54', 'Administrador', 'light', 'home');
 INSERT INTO `gt_usuario` VALUES (4, 'agora', 'cd8c8c307b43a2c160b9b9e94bf5b9e47c4c2b963532f96de3b34c4dd0c23e087ad189ca3f594e9ce1d020d8341cec3300eb9b91cc868871216edb3b333b9a7c', 'Francisco Yanza', '2020-09-26 23:39:29', 'Administrador', 'light', 'home');
 
 -- ----------------------------

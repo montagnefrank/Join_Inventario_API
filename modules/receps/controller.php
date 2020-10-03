@@ -88,7 +88,7 @@
                     devolRow.talla = $(nn).find('.tallaRead').html();
                     devolRow.color = $(nn).find('.colorRead').html();
                     devolRow.oldquantity = $(nn).find('.oldquantityRead').html();
-                    devolRow.type = '25';
+                    devolRow.type = '2';
                     devolRow.barcode = $(nn).find('.barcodeRead').html();
                     devolRow.returnquantity = $(nn).find('.thisCantAcum').html();
                     devolRow.cajamas = $(nn).find('.cajMasRead').html();
@@ -114,7 +114,7 @@
                                     userId = $('#sidebarLoaded').attr('userIdPanel');
                                 formData.append('userDevol', userId);
                                 formData.append('devol', JSON.stringify(devoldetail));
-                                formData.append('meth', 'saveNewDevol');
+                                formData.append('meth', 'saveNewReceps');
                                 apiCall(formData, function(data) {
                                     console.log(data);
                                     if (data.status == "saved") {
@@ -123,7 +123,7 @@
                                             complete: function() {
                                                 swal({
                                                     title: "Felicitaciones",
-                                                    text: "Su Devolucion ha sido registrada exitosamente.",
+                                                    text: "Su Recepcion ha sido registrada exitosamente.",
                                                     type: "success",
                                                     showCancelButton: false,
                                                     confirmButtonText: 'Entendido',
@@ -161,7 +161,7 @@
                 });
             } else {
                 $.growl.error({
-                    message: "No hay productos leidos para devolver"
+                    message: "No hay productos leidos para recibir"
                 });
             }
 
@@ -177,7 +177,7 @@
         var devolVal = $(document).find('#buscarDevol').val(),
             formData = new FormData();
         formData.append('devolVal', devolVal);
-        formData.append('meth', 'consultarDevol');
+        formData.append('meth', 'consultarReceps');
         apiCall(formData, function(data) {
             $('.searchingBtn').html('<i class="fa fa-search"></i>');
             var resp = JSON.parse(data.resp.GetReturnOrdenByNumberResult);
@@ -338,7 +338,7 @@
                                             <h2 class="font-weight-normal unidTotales">` + totalUnidades + `</h2>
                                         </div>
                                         <div class="col border-left text-center">
-                                            <label class="tx-12">Por Devolver</label>
+                                            <label class="tx-12">Por Recibir</label>
                                             <h2 class="font-weight-normal unidXDevolver">1</h2>
                                         </div>
                                     </div>

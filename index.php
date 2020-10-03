@@ -800,19 +800,29 @@ if ($_POST || $_GET) {
 
     //          DEBUG           //
     if ($method == 'debug') {
-        
-        error_log('//////////////////  ///////////////////////////////');
-        
-        $order = $_GET['find'];
-        $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
-        $client = new SoapClient($wsdlUrl);
-        $params = new stdClass();
-        //$params->CODIGOBARRAS = (int)$order;
-        $result = $client->SaveReturnDetail($params);
+
+        ////            CONSULTAMOS EL USUARIO EN LA BASE DE DATOS A VER SI EXISTE              ////
+        $query = " SELECT * "
+            . "FROM gt_tomas "
+            . "WHERE objToma LIKE '%\"gondola\":\"7186\"%'";
+        //error_log('/////////////////// '. $password );
+        $result = $c->query($query);
+        if (!$result) {
+            $json['scriptResp'] = "userqueryFail";
+            $json['q'] = $query;
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        }
+        $rows = $result->num_rows;
+        $row = $result->fetch_array(MYSQLI_ASSOC);
 
         ob_end_clean();
+        var_dump($query);
+        var_dump($row);
         var_dump($result);
-        var_dump($order);
         return;
     }
 
@@ -910,7 +920,6 @@ if ($_POST || $_GET) {
             $params->inventario = $_POST['inventario'];
             $result = $client->CreateInventarioFisico($params);
 
-
             $json['scriptResp'] = "done";
             $json['status'] = "saved";
             $output = ob_get_contents();
@@ -930,7 +939,7 @@ if ($_POST || $_GET) {
         }
     }
 
-    //          GUARDAR NUEVA TOMA           //
+    //          CONSULTAR DEVOLUCION        //
     if ($method == 'consultarDevol') {
 
         $order = $_POST['devolVal'];
@@ -941,8 +950,8 @@ if ($_POST || $_GET) {
         error_log('//////////////////  ///////////////////////////////');
         $params = new stdClass();
         $params->numero = (int)$order;
+        $params->tipo = 25;
         $result = $client->GetReturnOrdenByNumber($params);
-
 
         $json['scriptResp'] = "done";
         $json['resp'] = $result;
@@ -951,6 +960,129 @@ if ($_POST || $_GET) {
         $json['output'] = $output;
         echo json_encode($json);
         return;
+    }
+
+    //          GUARDAR NUEVA DEVOLUCION           //
+    if ($method == 'saveNewDevol') {
+
+        $date = date('Y-m-d H:i:s');
+        $devols = json_decode($_POST['devol'], true);
+        $queryNext = " INSERT INTO gt_devols ( userDevol, fechaDevol, objDevol, statusDevol) ";
+        $queryNext .= " VALUES ('" . $_POST['userDevol'] . "','" . $date . "','" . json_encode($_POST['devol']) . "','1') ";
+        $resultNext = $c->query($queryNext);
+
+        if ($resultNext) {
+
+            /** DESACTIVAR LA PUBLICACION */
+            foreach ($devols as $devol) {
+                $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+                $client = new SoapClient($wsdlUrl);
+
+                error_log('//////////////////       DEVOL    ///////////////////////////////' .  print_r($devol, true));
+                $string = '';
+                foreach ($devol as $key => $value) {
+                    if ($string == ''){
+                        $string .= $key . ":" . $value;
+                    } else {
+                        $string .= "," . $key . ":" . $value;
+                    }
+                }
+                error_log('//////////////////       DEVOLstring    ///////////////////////////////' .  print_r($string, true));
+                $params = new stdClass();
+                $params->detail = $string;
+                $result = $client->SaveReturnDetail($params);
+            }
+
+            $json['scriptResp'] = "done";
+            $json['status'] = "saved";
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        } else {
+            $json['scriptResp'] = "error";
+            $json['q'] = $queryNext;
+            $json['qer'] = $c->error;
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        }
+    }
+    
+    //          CONSULTAR RECEPCION         //
+    if ($method == 'consultarReceps') {
+
+        $order = $_POST['devolVal'];
+
+        $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+        $client = new SoapClient($wsdlUrl);
+
+        error_log('//////////////////  ///////////////////////////////');
+        $params = new stdClass();
+        $params->numero = (int)$order;
+        $params->tipo = 2;
+        $result = $client->GetReturnOrdenByNumber($params);
+
+        $json['scriptResp'] = "done";
+        $json['resp'] = $result;
+        $output = ob_get_contents();
+        ob_end_clean();
+        $json['output'] = $output;
+        echo json_encode($json);
+        return;
+    }
+
+    //          GUARDAR NUEVA ORDEN DE RECEPCION           //
+    if ($method == 'saveNewReceps') {
+
+        $date = date('Y-m-d H:i:s');
+        $devols = json_decode($_POST['devol'], true);
+        $queryNext = " INSERT INTO gt_devols ( userDevol, fechaDevol, objDevol, statusDevol) ";
+        $queryNext .= " VALUES ('" . $_POST['userDevol'] . "','" . $date . "','" . json_encode($_POST['devol']) . "','1') ";
+        $resultNext = $c->query($queryNext);
+
+        if ($resultNext) {
+
+            /** DESACTIVAR LA PUBLICACION */
+            foreach ($devols as $devol) {
+                $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+                $client = new SoapClient($wsdlUrl);
+
+                error_log('//////////////////       DEVOL    ///////////////////////////////' .  print_r($devol, true));
+                $string = '';
+                foreach ($devol as $key => $value) {
+                    if ($string == ''){
+                        $string .= $key . ":" . $value;
+                    } else {
+                        $string .= "," . $key . ":" . $value;
+                    }
+                }
+                error_log('//////////////////       DEVOLstring    ///////////////////////////////' .  print_r($string, true));
+                $params = new stdClass();
+                $params->detail = $string;
+                $result = $client->SaveReturnDetail($params);
+            }
+
+            $json['scriptResp'] = "done";
+            $json['status'] = "saved";
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        } else {
+            $json['scriptResp'] = "error";
+            $json['q'] = $queryNext;
+            $json['qer'] = $c->error;
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        }
     }
 }
 

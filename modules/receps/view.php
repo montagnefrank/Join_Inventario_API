@@ -3,19 +3,19 @@
         <div class="app-content  my-3 my-md-5" id="appContent">
             <div class="side-app">
                 <div class="page-header">
-                    <h4 class="page-title">Devolución de Productos</h4>
+                    <h4 class="page-title">Recepción de Productos</h4>
                     <a id="updateCharts" class="btn btn-outline-primary btn-pill "><i class="fa fa-refresh"></i></a>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">___APPNAME___</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"> Devoluciones</li>
+                        <li class="breadcrumb-item active" aria-current="page"> Recepción de Mercancía</li>
                     </ol>
                 </div>
 
                 <div class="col-lg-6 col-md-12 col-xl-3 anim anim1 anim11">
                     <div class="card">
-                        <a><img class="card-img-top br-tr-7 br-tl-7" src="___APIURI___assets/img/devols.jpg" alt="Bienvenido"></a>
+                        <a><img class="card-img-top br-tr-7 br-tl-7" src="___APIURI___assets/img/receps.jpg" alt="Bienvenido"></a>
                         <div class="card-body d-flex flex-column">
-                            <h4><a href="#"><i class="fa fa-search"></i> Buscar Orden de Devolución</a></h4>
+                            <h4><a href="#"><i class="fa fa-search"></i> Buscar Orden de Recepción</a></h4>
                         </div>
                         <div class="card-footer d-flex flex-column">
                             <div class="text-muted">Consulte en el sistema la orden para poder actualizar el estado de los prodcutos.</div>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-lg-12 anim anim1 buscarDevolBox">
                     <div class="input-group mb-3 ">
-                        <input type="number" class="form-control br-tl-7 br-bl-7" id="buscarDevol" placeholder="Ingrese la orden de Devolución">
+                        <input type="number" class="form-control br-tl-7 br-bl-7" id="buscarDevol" placeholder="Ingrese la orden de Recepción">
                         <div class="input-group-append ">
                             <button type="button" class="btn btn-join br-tr-7 br-br-7 searchingBtn text-white">
                                 <i class="fa fa-search"></i>
@@ -36,7 +36,7 @@
                 <div class="col-md-12 col-lg-12">
                     <div class="card anim anim3">
                         <div class="card-header">
-                            <h3 class="card-title"> <i class="fa fa-list"></i> Orden de Devolución <strong class="ordenTitleNumbr"></strong></h3>
+                            <h3 class="card-title"> <i class="fa fa-list"></i> Orden de Recepción <strong class="ordenTitleNumbr"></strong></h3>
                             <div class="card-options">
                                 <!-- <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
                                     <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a> -->
@@ -112,7 +112,7 @@
                 <div class="col-xl-6 anim anim3 ">
                     <div class="form-group">
                         <button type="button" class="text-white btn btn-join  form-control " id="saveNewDevol">
-                            <i class="fa fa-upload "></i> Cargar Devolución
+                            <i class="fa fa-upload "></i> Cargar Recepción
                         </button>
                     </div>
                     <div class="form-group">

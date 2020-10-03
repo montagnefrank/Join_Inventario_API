@@ -47,10 +47,10 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-3 anim anim2">
-                    <div class="card bg-join card-img-holder text-white">
+                    <div class="card bg-join card-img-holder text-white changePanel" data-panel="receps">
                         <div class="card-body">
                             <img src="___APIURI___assets/img/circle.svg" class="card-img-absolute" alt="circle-image">
-                            <h4 class=" "><i class="fa fa-cubes"></i> Consultar Productos
+                            <h4 class=" "><i class="fa fa-sign-in"></i> Recepción de Mercadería
                                 <i class="fa fa-chevron-right fa-x2 float-right"></i>
                             </h4>
                         </div>
@@ -60,7 +60,7 @@
                     <div class="card bg-join card-img-holder text-white">
                         <div class="card-body">
                             <img src="___APIURI___assets/img/circle.svg" class="card-img-absolute" alt="circle-image">
-                            <h4 class=" "><i class="fa fa-sign-in"></i> Recepción de Mercadería
+                            <h4 class=" "><i class="fa fa-cubes"></i> Consultar Productos
                                 <i class="fa fa-chevron-right fa-x2 float-right"></i>
                             </h4>
                         </div>
