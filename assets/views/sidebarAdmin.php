@@ -142,6 +142,12 @@
             <a class="side-menu__item changePanel" data-panel="receps" href="#"><i class="fa fa-sign-in"></i>&nbsp;<span class="side-menu__label">Recepciones</span></a>
         </li>
         <li>
+            <a class="side-menu__item changePanel" data-panel="trasl" href="#"><i class="fa fa-share-square-o"></i>&nbsp;<span class="side-menu__label">Reubicaciones</span></a>
+        </li>
+        <li>
+            <a class="side-menu__item changePanel" data-panel="traslados" href="#"><i class="fa fa-linode"></i>&nbsp;<span class="side-menu__label">Traslados</span></a>
+        </li>
+        <li>
             <a class="side-menu__item changePanel" data-panel="userconfig" href="#"><i class="side-menu__icon si si-settings"></i>&nbsp;<span class="side-menu__label">Ajustes</span></a>
         </li>
 

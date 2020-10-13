@@ -1,42 +1,32 @@
 <?php
 
-// Name of the file
-$filename = 'dashboard.sql';
-// MySQL host
+$filename = 'joinventory.sql';
 $mysql_host = 'localhost';
-// MySQL username
-$mysql_username = 'burtonserversc_master';
-// MySQL password
-$mysql_password = 'burtonserversSEGURIDAD2020';
-// Database name
-$mysql_database = 'burtonserversc_leads';
+$mysql_username = 'root';
+$mysql_password = '';
+$mysql_database = 'joinventory';
 
-// Connect to MySQL server
-mysql_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysql_error());
-// Select database
-mysql_select_db($mysql_database) or die('Error selecting MySQL database: ' . mysql_error());
+//CONEXION A DB
+$c = mysqli_connect($mysql_host, $mysql_username, $mysql_password, $mysql_database);
+if (!$c) {
+    echo "Error: No hay conexión a la Base de Datos." . PHP_EOL;
+    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+    exit;
+}
 
-// Temporary variable, used to store current query
 $templine = '';
-// Read in entire file
 $lines = file($filename);
-// Loop through each line
-foreach ($lines as $line)
-{
-// Skip it if it's a comment
-if (substr($line, 0, 2) == '--' || $line == '')
-    continue;
+foreach ($lines as $line) {
+    
+    if (substr($line, 0, 2) == '--' || $line == '')
+        continue;
 
-// Add this line to the current segment
-$templine .= $line;
-// If it has a semicolon at the end, it's the end of the query
-if (substr(trim($line), -1, 1) == ';')
-{
-    // Perform the query
-    mysql_query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
-    // Reset temp variable to empty
-    $templine = '';
+    $templine .= $line;
+    if (substr(trim($line), -1, 1) == ';') {
+        $result = $c->query($templine) or die('error mysql' . $c->error);
+        $templine = '';
+    }
 }
-}
- echo "Tables imported successfully";
-?>
+
+echo "BASE DE DATOS IMPORTADA EXITOSAMENTE";

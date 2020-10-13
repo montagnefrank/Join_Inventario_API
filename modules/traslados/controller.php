@@ -31,7 +31,7 @@
                 });
                 return;
             }
-            getThisDevol();
+            getThisTraslado();
         });
         $(document).find('#buscarDevol').keypress(function(e) {
             if (e.which == 13) {
@@ -43,7 +43,7 @@
                     });
                     return;
                 }
-                getThisDevol();
+                getThisTraslado();
             }
         });
 
@@ -79,11 +79,11 @@
             var rowsCount = 0,
                 devoldetail = [],
                 userId = $('#sidebarLoaded').attr('userIdPanel'),
-                locationBox = $('#locationBox').val();
+                carritonBox = $('#carritonBox').val();
 
-            if (locationBox == ''  ) {
+            if (carritonBox == '') {
                 $.growl.error({
-                    message: "Debe ingresar la ubicacion"
+                    message: "Debe ingresar el número de carrito"
                 });
                 return;
             }
@@ -95,13 +95,14 @@
                     devolRow.talla = $(nn).find('.tallaRead').html();
                     devolRow.color = $(nn).find('.colorRead').html();
                     devolRow.oldquantity = $(nn).find('.oldquantityRead').html();
-                    devolRow.type = '2';
+                    devolRow.type = '22';
                     devolRow.barcode = $(nn).find('.barcodeRead').html();
                     devolRow.returnquantity = $(nn).find('.thisCantAcum').html();
                     devolRow.cajamas = $(nn).find('.cajMasRead').html();
-                    devolRow.ubi = locationBox;
+                    devolRow.ubi = $(nn).find('.locatRead').html();;
                     devolRow.doc = $(nn).find('.docRead').html();
                     devolRow.usuario = userId;
+                    devolRow.carrito = carritonBox;
 
                     devoldetail.push(devolRow);
 
@@ -121,7 +122,7 @@
                                     userId = $('#sidebarLoaded').attr('userIdPanel');
                                 formData.append('userDevol', userId);
                                 formData.append('devol', JSON.stringify(devoldetail));
-                                formData.append('meth', 'saveNewReceps');
+                                formData.append('meth', 'saveNewTraslado');
                                 apiCall(formData, function(data) {
                                     console.log(data);
                                     if (data.status == "saved") {
@@ -130,7 +131,7 @@
                                             complete: function() {
                                                 swal({
                                                     title: "Felicitaciones",
-                                                    text: "Su Recepcion ha sido registrada exitosamente.",
+                                                    text: "Su Traslado ha sido registrado en el sistema exitosamente.",
                                                     type: "success",
                                                     showCancelButton: false,
                                                     confirmButtonText: 'Entendido',
@@ -178,16 +179,19 @@
         enterSubm();
     }, 1000);
 
-    /** OBTENEMOS LOS DATOS DE LA ORDEN DE DEVOLUCION */
-    function getThisDevol() {
+    /** OBTENEMOS LOS DATOS DE LA ORDEN DE TRASLADO */
+    function getThisTraslado() {
         $('.searchingBtn').html('<i class="fa fa-spinner fa-spin"></i>');
-        var devolVal = $(document).find('#buscarDevol').val(),
-            formData = new FormData();
-        formData.append('devolVal', devolVal);
-        formData.append('meth', 'consultarReceps');
+        var trasladoVal = $(document).find('#buscarDevol').val(),
+            formData = new FormData(),
+            userId = $('#sidebarLoaded').attr('userIdPanel');
+        formData.append('userId', userId);
+        formData.append('trasladoVal', trasladoVal);
+        formData.append('meth', 'consultarTraslado');
         apiCall(formData, function(data) {
+            console.log(data);
             $('.searchingBtn').html('<i class="fa fa-search"></i>');
-            var resp = JSON.parse(data.resp.GetReturnOrdenByNumberResult);
+            var resp = JSON.parse(data.resp.GetSolicitudTrasladoResult);
             console.log(resp);
             console.log(resp.pedidoList.length);
             if (resp.pedidoList.length > 0) {
@@ -196,14 +200,15 @@
                     complete: function() {
                         var code = '';
                         $('.listadoDevol tbody').html(code);
-                        $('.ordenTitleNumbr').html(devolVal);
+                        $('.ordenTitleNumbr').html(trasladoVal);
                         for (i = 0; i < resp.pedidoList.length; i++) {
                             $('.listadoDevol tbody').append(' <tr class="thisDevolProd">' +
                                 '<td class="codArticulo" data-valtype="codArticulo">' + resp.pedidoList[i].codArticulo + '</td>' +
                                 '<td class="codigoBarras" data-valtype="codigoBarras">' + resp.pedidoList[i].codigoBarras + '</td> ' +
-                                '<td class="descricion" data-valtype="descricion">' + resp.pedidoList[i].descricion + '</td> ' +
+                                '<td class="descricion" data-valtype="descricion">' + resp.pedidoList[i].todoRecibido + '</td> ' +
                                 '<td class="referencia" data-valtype="referencia">' + resp.pedidoList[i].referencia + '</td> ' +
                                 '<td class="unidadesTotales" data-valtype="unidadesTotales">' + resp.pedidoList[i].unidadesTotales + '</td> ' +
+                                '<td class="unidadesLeidas" data-valtype="unidadesLeidas">0</td> ' +
                                 '<td class="offscreen talla" data-valtype="talla">' + resp.pedidoList[i].talla + '</td> ' +
                                 '<td class="offscreen color" data-valtype="color">' + resp.pedidoList[i].color + '</td> ' +
                                 '<td class="offscreen suPedido" data-valtype="suPedido">' + resp.pedidoList[i].suPedido + '</td> ' +
@@ -248,36 +253,52 @@
                 totalUnidades = $(n).find('.unidadesTotales').html();
 
             if (codigoBarras == codbar) {
+                var qyt = 1;
                 isPresent = 1;
-                $(document).find('.porDevolInfoBox').each(function(ii, nn) {
-                    var codigoBarrasDevuelto = $(nn).find('.codigoBarrasDevuelto').html();
-                    if (codigoBarras == codigoBarrasDevuelto) {
-                        isInvoked = 1;
-                        var unidXDevolver = $(nn).find('.unidXDevolver').html();
-                        if (+unidXDevolver < +totalUnidades) {
-                            unidXDevolver++;
-                            var newPropor = (+unidXDevolver * 100) / +totalUnidades
-                            $(nn).find('.unidXDevolver').html(unidXDevolver);
-                            $(nn).find('.unidXDevolverPropor').attr('style', 'width: ' + newPropor.toFixed(0) + '%');
-                            if (+unidXDevolver == +totalUnidades) {
-                                $(nn).find('.card').addClass('bg-info text-white');
-                            }
-                            $(nn).find('.thisReadDevol tbody tr').each(function(iii, nnn) {
-                                var thisLocation = $(nnn).find('.locatRead').html(),
-                                    thisCajaMas = $(nnn).find('.cajMasRead').html(),
-                                    thisCant = $(nnn).find('.thisCantAcum').html();
-                                if (thisLocation == locatRead && thisCajaMas == cajMasRead) {
-                                    isListed = 1;
-                                    thisCant++;
-                                    $(nnn).find('.thisCantAcum').html(thisCant);
+
+                var formData = new FormData();
+                formData.append('codigoArticulo', codarticuloRead);
+                formData.append('talla', tallaRead);
+                formData.append('color', colorRead);
+                formData.append('codigoBarrasCaja', cajMasRead);
+                formData.append('meth', 'totalProdsInBox');
+                apiCall(formData, function(data) {
+                    var resp = JSON.parse(data.result.GetQuantityProductInMasterBoxResult);
+                    if (resp.code == '200') {
+                        if (resp.quantity <= totalUnidades) {
+                            qyt = resp.quantity;
+                        }
+                    }
+                    $(document).find('.porDevolInfoBox').each(function(ii, nn) {
+                        var codigoBarrasDevuelto = $(nn).find('.codigoBarrasDevuelto').html();
+                        if (codigoBarras == codigoBarrasDevuelto) {
+                            isInvoked = 1;
+                            var unidXDevolver = $(nn).find('.unidXDevolver').html();
+                            if (+unidXDevolver < +totalUnidades) {
+                                unidXDevolver = +unidXDevolver + +qyt;
+                                var newPropor = (+unidXDevolver * 100) / +totalUnidades
+                                $(nn).find('.unidXDevolver').html(unidXDevolver);
+                                $(n).find('.unidadesLeidas').html(unidXDevolver);
+                                $(nn).find('.unidXDevolverPropor').attr('style', 'width: ' + newPropor.toFixed(0) + '%');
+                                if (+unidXDevolver == +totalUnidades) {
+                                    $(nn).find('.card').addClass('bg-info text-white');
                                 }
-                            });
-                            if (isListed == 0) {
-                                var listThis = `
+                                $(nn).find('.thisReadDevol tbody tr').each(function(iii, nnn) {
+                                    var thisLocation = $(nnn).find('.locatRead').html(),
+                                        thisCajaMas = $(nnn).find('.cajMasRead').html(),
+                                        thisCant = $(nnn).find('.thisCantAcum').html();
+                                    if (thisLocation == locatRead && thisCajaMas == cajMasRead) {
+                                        isListed = 1;
+                                        thisCant++;
+                                        $(nnn).find('.thisCantAcum').html(thisCant);
+                                    }
+                                });
+                                if (isListed == 0) {
+                                    var listThis = `
                                             <tr>
                                                 <td class="text-dark locatRead text-center">` + locatRead + `</td>
                                                 <td class="text-dark cajMasRead text-center">` + cajMasRead + `</td>
-                                                <td class="text-dark thisCantAcum text-center">1</td>
+                                                <td class="text-dark thisCantAcum text-center">` + qyt + `</td>
                                                 <td class="offscreen codarticuloRead text-center">` + codarticuloRead + `</td>
                                                 <td class="offscreen tallaRead text-center">` + tallaRead + `</td>
                                                 <td class="offscreen colorRead text-center">` + colorRead + `</td>
@@ -286,18 +307,18 @@
                                                 <td class="offscreen docRead text-center">` + docRead + `</td>
                                             </tr>
                                             `;
-                                $(nn).find('.thisReadDevol tbody').append(listThis);
+                                    $(nn).find('.thisReadDevol tbody').append(listThis);
+                                }
+                            } else {
+                                $.growl.error({
+                                    message: "No puedes exceder el límite de la Orden"
+                                });
                             }
-                        } else {
-                            $.growl.error({
-                                message: "No puedes exceder el límite de la Orden"
-                            });
                         }
-                    }
-                });
-                if (isInvoked == 0) {
-                    var newPropor = 100 / +totalUnidades
-                    var invoke = `
+                    });
+                    if (isInvoked == 0) {
+                        var newPropor = (+qyt * 100) / +totalUnidades
+                        var invoke = `
                         <div class="col-sm-12 col-lg-12 col-xl-6 porDevolInfoBox">
                             <div class="card anim cod_` + codigoBarras + `">
                                 <div class="card-header">
@@ -311,7 +332,7 @@
                                     <table class="table table-bordered border-top card-table table-vcenter text-nowrap table-primary thisReadDevol">
                                         <thead class="bg-info text-white text-center">
                                             <tr>
-                                                <th class="text-white offscreen">Ubicacion</th>
+                                                <th class="text-white">Ubicacion</th>
                                                 <th class="text-white">Caja Master</th>
                                                 <th class="text-white">Cantidad</th>
                                                 <th class="offscreen">codarticulo</th>
@@ -324,9 +345,9 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="text-dark locatRead text-center offscreen">` + locatRead + `</td>
+                                                <td class="text-dark locatRead text-center">` + locatRead + `</td>
                                                 <td class="text-dark cajMasRead text-center">` + cajMasRead + `</td>
-                                                <td class="text-dark thisCantAcum text-center">1</td>
+                                                <td class="text-dark thisCantAcum text-center">` + qyt + `</td>
                                                 <td class="offscreen codarticuloRead text-center">` + codarticuloRead + `</td>
                                                 <td class="offscreen tallaRead text-center">` + tallaRead + `</td>
                                                 <td class="offscreen colorRead text-center">` + colorRead + `</td>
@@ -345,8 +366,8 @@
                                             <h2 class="font-weight-normal unidTotales">` + totalUnidades + `</h2>
                                         </div>
                                         <div class="col border-left text-center">
-                                            <label class="tx-12">Por Recibir</label>
-                                            <h2 class="font-weight-normal unidXDevolver">1</h2>
+                                            <label class="tx-12">A Trasladar</label>
+                                            <h2 class="font-weight-normal unidXDevolver">` + qyt + `</h2>
                                         </div>
                                     </div>
                                     <div class="progress mt-4">
@@ -357,11 +378,13 @@
                         </div>
                         `;
 
-                    $(invoke).insertAfter('.readerPistolBox');
-                    $('.cod_' + codigoBarras).velocity("transition.slideUpBigIn", {
-                        stagger: 250
-                    });
-                }
+                        $(n).find('.unidadesLeidas').html(qyt);
+                        $(invoke).insertAfter('.readerPistolBox');
+                        $('.cod_' + codigoBarras).velocity("transition.slideUpBigIn", {
+                            stagger: 250
+                        });
+                    }
+                });
             }
         });
         if (isPresent == 0) {
@@ -398,17 +421,17 @@
             }
         });
 
-        //$(document).find('#locationBox').val('0000');
+        $(document).find('#locationBox').val('0000');
         $(document).off('change', "input[type=radio][name=caja-radios]");
         $(document).on('change', "input[type=radio][name=caja-radios]", function(e) {
             console.log(this.value);
-            if (this.value == 'sincajamaster') {
+            if (this.value == 'U') {
                 $(document).find('#locationBox').val('');
                 $(document).find('.cajamasterBoxInpG').slideUp('slow');
                 $(document).find('.locationBoxInpG').slideDown('slow');
                 $(document).find('#cajamasterBox').val('0000');
                 $('.locationBoxInp').focus();
-            } else if (this.value == 'cajamaster') {
+            } else if (this.value == 'C') {
                 $(document).find('#cajamasterBox').val('');
                 $(document).find('.cajamasterBoxInpG').slideDown('slow');
                 $(document).find('.locationBoxInpG').slideUp('slow');

@@ -50,3 +50,14 @@ if (!$c) {
     exit;
 }
 
+date_default_timezone_set('America/Guayaquil');
+$svr_servidor = "PVENTADB_SRV";
+$svr_base = "AGORA";
+$svr_usuario = "SA";
+$svr_contrasena = "masterkey";
+$conectioninfo = array("Database" => $svr_base, "UID" => $svr_usuario, "PWD" => $svr_contrasena, "CharacterSet" => "UTF-8");
+$conexion = sqlsrv_connect($servername, $conectioninfo);
+if ($conexion == false) {
+    $mensaje = "Existe un error al intentar conectarse con el servidor SQLSERVER";
+    exit;
+}

@@ -57,20 +57,20 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-3 anim anim2">
-                    <div class="card bg-join card-img-holder text-white">
+                    <div class="card bg-join card-img-holder text-white changePanel" data-panel="trasl">
                         <div class="card-body">
                             <img src="___APIURI___assets/img/circle.svg" class="card-img-absolute" alt="circle-image">
-                            <h4 class=" "><i class="fa fa-cubes"></i> Consultar Productos
+                            <h4 class=" "><i class="fa fa-share-square-o" aria-hidden="true"></i> Reubicacion de Prodcutos
                                 <i class="fa fa-chevron-right fa-x2 float-right"></i>
                             </h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-3 anim anim2">
-                    <div class="card bg-join card-img-holder text-white">
+                    <div class="card bg-join card-img-holder text-white changePanel" data-panel="traslados">
                         <div class="card-body">
                             <img src="___APIURI___assets/img/circle.svg" class="card-img-absolute" alt="circle-image">
-                            <h4 class=" "><i class="fa fa-share-square-o" aria-hidden="true"></i> Traslados
+                            <h4 class=" "><i class="fa fa-linode"></i> Traslados de Productos
                                 <i class="fa fa-chevron-right fa-x2 float-right"></i>
                             </h4>
                         </div>

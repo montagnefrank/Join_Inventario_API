@@ -798,34 +798,6 @@ if ($_POST || $_GET) {
         }
     }
 
-    //          DEBUG           //
-    if ($method == 'debug') {
-
-        ////            CONSULTAMOS EL USUARIO EN LA BASE DE DATOS A VER SI EXISTE              ////
-        $query = " SELECT * "
-            . "FROM gt_tomas "
-            . "WHERE objToma LIKE '%\"gondola\":\"7186\"%'";
-        //error_log('/////////////////// '. $password );
-        $result = $c->query($query);
-        if (!$result) {
-            $json['scriptResp'] = "userqueryFail";
-            $json['q'] = $query;
-            $output = ob_get_contents();
-            ob_end_clean();
-            $json['output'] = $output;
-            echo json_encode($json);
-            return;
-        }
-        $rows = $result->num_rows;
-        $row = $result->fetch_array(MYSQLI_ASSOC);
-
-        ob_end_clean();
-        var_dump($query);
-        var_dump($row);
-        var_dump($result);
-        return;
-    }
-
     //          GENCSV           //
     if ($method == 'newCSV') {
 
@@ -981,7 +953,7 @@ if ($_POST || $_GET) {
                 error_log('//////////////////       DEVOL    ///////////////////////////////' .  print_r($devol, true));
                 $string = '';
                 foreach ($devol as $key => $value) {
-                    if ($string == ''){
+                    if ($string == '') {
                         $string .= $key . ":" . $value;
                     } else {
                         $string .= "," . $key . ":" . $value;
@@ -1011,7 +983,7 @@ if ($_POST || $_GET) {
             return;
         }
     }
-    
+
     //          CONSULTAR RECEPCION         //
     if ($method == 'consultarReceps') {
 
@@ -1054,7 +1026,7 @@ if ($_POST || $_GET) {
                 error_log('//////////////////       DEVOL    ///////////////////////////////' .  print_r($devol, true));
                 $string = '';
                 foreach ($devol as $key => $value) {
-                    if ($string == ''){
+                    if ($string == '') {
                         $string .= $key . ":" . $value;
                     } else {
                         $string .= "," . $key . ":" . $value;
@@ -1083,6 +1055,193 @@ if ($_POST || $_GET) {
             echo json_encode($json);
             return;
         }
+    }
+
+    //          GUARDAR NUEVA REUBICACION DE PRODUCTOS         //
+    if ($method == 'saveNewReub') {
+
+        $date = date('Y-m-d H:i:s');
+        $devols = json_decode($_POST['devol'], true);
+        $queryNext = " INSERT INTO gt_reubs ( userReub, fechaReub, objReub, statusReub) ";
+        $queryNext .= " VALUES ('" . $_POST['userReub'] . "','" . $date . "','" . json_encode($_POST['objReub']) . "','1') ";
+        $resultNext = $c->query($queryNext);
+
+        if ($resultNext) {
+
+            /** DESACTIVAR LA PUBLICACION */
+            foreach ($devols as $devol) {
+                $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+                $client = new SoapClient($wsdlUrl);
+
+                error_log('//////////////////       DEVOL    ///////////////////////////////' .  print_r($devol, true));
+                $string = '';
+                foreach ($devol as $key => $value) {
+                    if ($string == '') {
+                        $string .= $key . ":" . $value;
+                    } else {
+                        $string .= "," . $key . ":" . $value;
+                    }
+                }
+                error_log('//////////////////       DEVOLstring    ///////////////////////////////' .  print_r($string, true));
+                $params = new stdClass();
+                $params->detail = $string;
+                $result = $client->SaveReturnDetail($params);
+            }
+
+            $json['scriptResp'] = "done";
+            $json['status'] = "saved";
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        } else {
+            $json['scriptResp'] = "error";
+            $json['q'] = $queryNext;
+            $json['qer'] = $c->error;
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        }
+    }
+
+    //          CONSULTAR TRASLADO         //
+    if ($method == 'consultarTraslado') {
+
+        $order = $_POST['trasladoVal'];
+        $userId = $_POST['userId'];
+
+        $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+        $client = new SoapClient($wsdlUrl);
+
+        error_log('//////////////////  ///////////////////////////////');
+        $params = new stdClass();
+        $params->supedido  = (int)$order;
+        $params->tipodoc  = 22;
+        $params->codvendedor  = (int)$userId;
+        $result = $client->GetSolicitudTraslado($params);
+
+        $json['scriptResp'] = "done";
+        $json['resp'] = $result;
+        $json['params'] = $params;
+        $output = ob_get_contents();
+        ob_end_clean();
+        $json['output'] = $output;
+        echo json_encode($json);
+        return;
+    }
+
+    //          GUARDAR NUEVA ORDEN DE RECEPCION           //
+    if ($method == 'saveNewTraslado') {
+
+        $date = date('Y-m-d H:i:s');
+        $devols = json_decode($_POST['devol'], true);
+        $queryNext = " INSERT INTO gt_devols ( userDevol, fechaDevol, objDevol, statusDevol) ";
+        $queryNext .= " VALUES ('" . $_POST['userDevol'] . "','" . $date . "','" . json_encode($_POST['devol']) . "','1') ";
+        $resultNext = $c->query($queryNext);
+
+        if ($resultNext) {
+
+            /** DESACTIVAR LA PUBLICACION */
+            foreach ($devols as $devol) {
+                $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+                $client = new SoapClient($wsdlUrl);
+
+                error_log('//////////////////       DEVOL    ///////////////////////////////' .  print_r($devol, true));
+                $string = '';
+                foreach ($devol as $key => $value) {
+                    if ($string == '') {
+                        $string .= $key . ":" . $value;
+                    } else {
+                        $string .= "," . $key . ":" . $value;
+                    }
+                }
+                error_log('//////////////////       DEVOLstring    ///////////////////////////////' .  print_r($string, true));
+                $params = new stdClass();
+                $params->detail = $string;
+                $result = $client->SaveReturnDetail($params);
+            }
+
+            $json['scriptResp'] = "done";
+            $json['status'] = "saved";
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        } else {
+            $json['scriptResp'] = "error";
+            $json['q'] = $queryNext;
+            $json['qer'] = $c->error;
+            $output = ob_get_contents();
+            ob_end_clean();
+            $json['output'] = $output;
+            echo json_encode($json);
+            return;
+        }
+    }
+
+    //          PREGUNTAMOS EL TOTAL DE PRODUCTOS EN ESA CAJA           //
+    if ($method == 'totalProdsInBox') {
+
+        $codigoArticulo = $_POST['codigoArticulo'];
+        $talla = $_POST['talla'];
+        $color = $_POST['color'];
+        $codigoBarrasCaja = $_POST['codigoBarrasCaja'];
+/* 
+        $codigoArticulo = 8362;
+        $talla = '360';
+        $color = '020';
+        $codigoBarrasCaja = '20000669'; */
+
+        $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+        $client = new SoapClient($wsdlUrl);
+
+        $params = new stdClass();
+        $params->codigoArticulo = (int)$codigoArticulo;
+        $params->talla = $talla;
+        $params->color = $color;
+        $params->codigoBarrasCaja = $codigoBarrasCaja;
+        $result = $client->GetQuantityProductInMasterBox($params);
+
+        $json['scriptResp'] = "done";
+        $json['status'] = "gotback";
+        $json['result'] = $result;
+        $output = ob_get_contents();
+        ob_end_clean();
+        $json['output'] = $output;
+        echo json_encode($json);
+        return;
+    }
+
+    //          DEBUG           //
+    if ($method == 'debug') {
+        
+        $codigoArticulo = 8362;
+        $talla = '360';
+        $color = '020';
+        $codigoBarrasCaja = '20000669';
+
+        $wsdlUrl = 'http://10.238.26.69:9298/Service1.asmx?wsdl';
+        $client = new SoapClient($wsdlUrl);
+
+        $params = new stdClass();
+        $params->codigoArticulo = (int)$codigoArticulo;
+        $params->talla = $talla;
+        $params->color = $color;
+        $params->codigoBarrasCaja = $codigoBarrasCaja;
+        $result = $client->GetQuantityProductInMasterBox($params);
+
+        $json['scriptResp'] = "done";
+        $json['status'] = "gotback";
+        $json['result'] = $result;
+        $output = ob_get_contents();
+        ob_end_clean();
+        $json['output'] = $output;
+        echo json_encode($result);
+        return;
     }
 }
 
